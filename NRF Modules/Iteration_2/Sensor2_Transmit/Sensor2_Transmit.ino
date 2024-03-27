@@ -17,8 +17,8 @@ const uint64_t sensor2 = 0xF0F0F0F066;
 const int moistureSensorPin = A0; 
 
 struct data_packet {
-  int moistureValue;
-  int sensorNum;
+  uint16_t moistureValue;
+  uint16_t sensorNum;
 };
 
 data_packet sensor2_packet;
@@ -29,13 +29,12 @@ void setup() {
   radio.setPALevel(RF24_PA_MIN);
   radio.setDataRate(RF24_250KBPS);
   radio.stopListening();
-  // sensor2_packet.sensorNum = 2;
+  sensor2_packet.sensorNum = 2;
 }
 
 void loop() {
   delay(2000);
   int moistureValue = analogRead(moistureSensorPin); // Read the value from the first moisture sensor
-  sensor2_packet.sensorNum = 2;
   sensor2_packet.moistureValue = moistureValue;
   radio.write(&sensor2_packet, sizeof(sensor2_packet));
   Serial.print(sensor2_packet.sensorNum); Serial.print(sensor2_packet.moistureValue);
