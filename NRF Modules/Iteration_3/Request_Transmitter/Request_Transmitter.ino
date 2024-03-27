@@ -42,7 +42,7 @@ void loop() {
         sensor1_packet.moistureValue = moistureValue;
         radio.write(&sensor1_packet, sizeof(sensor1_packet));
       }
-      Serial.println("Request Heard, Data sent."); Serial.print(sensor1_packet.moistureValue);
+      Serial.println("Request Heard, Data sent.");
     }
     else{
       Serial.println("Not talking to me!");

@@ -37,22 +37,26 @@ void setup() {
 }
 
 void loop() {
-  delay(5000);
+  delay(2000);
   for(int i = 0; i < numProbes; i++){
+    payload_pipe = 0;
+    radio.flush_rx();
     radio.stopListening();
     radio.write(&request[i], sizeof(request));
     Serial.print("Request to sensor "); Serial.print(request[i]); Serial.println(" sent.");
     
     radio.startListening();
     int start = millis();
-    while(!radio.available(&payload_pipe) && (millis() - start) < wait_time);
+    while((millis() - start) < wait_time && payload_pipe != request[i]) {
+      radio.available(&payload_pipe);
+    }
     if((millis()-start) >= wait_time){
       Serial.println("No response was heard.");
       delay(1000);
       continue;      
     }
     radio.read(&transmitted_data, sizeof(transmitted_data));
-    radio.flush_rx();
+    
     if(transmitted_data.sensorNum == request[i]){
       Serial.print("Request to sensor "); Serial.print(request[i]); Serial.println(" was successful.");
       Serial.print("Sensor: "); Serial.print(transmitted_data.sensorNum); Serial.print(" | Moisture Value: "); Serial.println(transmitted_data.moistureValue);
