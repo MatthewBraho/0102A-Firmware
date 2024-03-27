@@ -17,8 +17,8 @@ const uint64_t sensor1 = 0xF0F0F0F0AA;
 const int moistureSensorPin = A0; 
 
 struct data_packet{
-  int moistureValue;
-  int sensorNum;
+  uint16_t moistureValue;
+  uint16_t sensorNum;
 };
 
 data_packet sensor1_packet;
@@ -38,5 +38,5 @@ void loop() {
   sensor1_packet.moistureValue = moistureValue;
   sensor1_packet.sensorNum = 1;
   radio.write(&sensor1_packet, sizeof(sensor1_packet));
-  Serial.println(" Sent");
+  Serial.println("Sent");
 }
