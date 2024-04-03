@@ -22,6 +22,7 @@ const int numProbes = 2;
 
 //How long to wait for a reply
 unsigned long wait_time = 5000; 
+unsigned long buffer_time = 250;
 //Placeholder to check which probe is answering its request
 uint8_t payload_pipe = 0;
 
@@ -48,24 +49,32 @@ void loop() {
 
   //Call for the probes one by one
   for(int i = 0; i < numProbes; i++){
+    delay(2000);
     payload_pipe = 0;
     radio.flush_rx(); //Flush the RX buffer so old values dont get read
 
     //Sending a request
     radio.stopListening(); 
-    radio.write(&request[i], sizeof(request)); //Send a request to ith probe
+
+    unsigned long start = millis(); //Start a timer to begin waiting for a response
+    while(millis()-start < buffer_time){
+      radio.write(&request[i], sizeof(request)); //Send a request to ith probe
+    }
     Serial.print("Request to sensor "); Serial.print(request[i]); Serial.println(" sent.");
 
     //Listening for a response
     radio.startListening();
-    int start = millis(); //Start a timer to begin waiting for a response
+    
+    start = millis(); //Start a timer to begin waiting for a response
     //Continue checking if bytes have arrived from the correct probe, if they arent arriving then break when wait_time ms has elapsed
     while((millis() - start) < wait_time && payload_pipe != request[i]) {
+      //radio.flush_rx();
       radio.available(&payload_pipe);
     }
     
     //If the loop was broken due to exceeding the wait time, then give up on the call.
     if((millis()-start) >= wait_time){
+      Serial.println(payload_pipe);
       Serial.println("No response was heard.");
       delay(1000);
       //Jump to next probe.
