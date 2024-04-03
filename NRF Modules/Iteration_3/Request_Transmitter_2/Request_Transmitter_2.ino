@@ -45,9 +45,10 @@ void loop() {
   if(radio.available()){
     radio.read(&request, sizeof(request));
     //If the request is addressed to this probe (2), send a data packet back.
+    Serial.println(request);
     if(request == 2){
       radio.stopListening();
-      int start = millis();
+      unsigned long start = millis();
       
       //Continously read sensor data and send it off for 500 ms to allow for reciever to pick up on it.
       while(millis()-start < buffer_time){

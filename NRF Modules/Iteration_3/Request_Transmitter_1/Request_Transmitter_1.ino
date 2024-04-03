@@ -41,14 +41,13 @@ void setup() {
 
 void loop() {
   radio.startListening();
-
   //If it receives a request, read who its addressed for and assign it to request
   if(radio.available()){
     radio.read(&request, sizeof(request));
     //If the request is addressed to this probe (1), send a data packet back.
     if(request == 1){
       radio.stopListening();
-      int start = millis(); //Begin buffer time
+      unsigned long start = millis(); //Begin buffer time
       //Continously read sensor data and send it off for 500 ms to allow for reciever to pick up on it.
       while(millis()-start < buffer_time){
         int moistureValue = analogRead(moistureSensorPin);
