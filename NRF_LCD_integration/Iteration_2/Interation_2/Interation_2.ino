@@ -41,18 +41,47 @@ LiquidCrystal lcd(rs, en, d4, d5, d6, d7);
 const int buttonPin = 3;
 int button_num = 0;
 
+const int LED_1 = 9;
+const int LED_2 = 5;
+int LED_all[] = {LED_1, LED_2};
+const int moist_threshold = 300;
+long counter = 0;
+long max_count = 400001;
+
 void buttonInterrupt () { //Interrupt function that listens for the rising of the button
   if(button_num == (numProbes -1)) {
     button_num = 0;
   } else {
     button_num += 1;
   }
+
   lcd.clear();
   lcd.setCursor(0, 0);
   lcd.print("Sensor " + String(button_num + 1));
   lcd.setCursor(0, 1);
   lcd.print("Pending");
 
+  while (counter < max_count){
+  counter++;                 // will increment counter by 1 
+  if (counter == 100000)     // Check if counter value reach to 100000
+  {
+    digitalWrite(LED_all[button_num], HIGH); // turn LED ON by writing HIGH (Sending 5v to pin 13)
+  }
+  else if (counter == 200000) // Check if counter value reach to 200000
+  {
+    digitalWrite(LED_all[button_num], LOW);  // turn LED OFF by writing LOW (Sending 0v to pin 13)
+  }
+  //Code is non blocking you can add your loop code after this
+  else if (counter == 300000) // Check if counter value reach to 200000
+  {
+    digitalWrite(LED_all[button_num], HIGH);  // turn LED OFF by writing LOW (Sending 0v to pin 13)
+  }
+  else if (counter == 400000) // Check if counter value reach to 200000
+  {
+    digitalWrite(LED_all[button_num], LOW);  // turn LED OFF by writing LOW (Sending 0v to pin 13)
+  }
+  }
+  counter = 0;
 }
 
 void setup() {
@@ -66,6 +95,9 @@ void setup() {
   radio.setDataRate(RF24_250KBPS);
   pinMode(buttonPin, INPUT_PULLUP);
   attachInterrupt(digitalPinToInterrupt(buttonPin), buttonInterrupt, RISING);
+
+  pinMode(LED_1, OUTPUT);
+  pinMode(LED_2, OUTPUT);
 }
 
 void loop() {
@@ -118,6 +150,13 @@ void loop() {
       Serial.print("Request to sensor "); Serial.print(request[i]); Serial.println(" was successful.");\
       Serial.print("Sensor: "); Serial.print(transmitted_data.sensorNum); Serial.print(" | Moisture Value: "); Serial.println(transmitted_data.moistureValue);
       //This allows for printing to the LCD display if there is no value recieved from the LCD screen
+      if(transmitted_data.moistureValue < moist_threshold){
+        digitalWrite(LED_all[transmitted_data.sensorNum], HIGH); // If moisture level is below the threshold, turn the light on
+      }
+      else{
+        digitalWrite(LED_all[transmitted_data.sensorNum], LOW); // If the moisture level is above the threshold, turn off the light
+      }
+
       if(button_num == i) { 
         lcd.clear();
         lcd.setCursor(0, 0);
