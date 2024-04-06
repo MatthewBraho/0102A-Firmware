@@ -151,10 +151,10 @@ void loop() {
       Serial.print("Sensor: "); Serial.print(transmitted_data.sensorNum); Serial.print(" | Moisture Value: "); Serial.println(transmitted_data.moistureValue);
       //This allows for printing to the LCD display if there is no value recieved from the LCD screen
       if(transmitted_data.moistureValue < moist_threshold){
-        digitalWrite(LED_all[transmitted_data.sensorNum], HIGH); // If moisture level is below the threshold, turn the light on
+        digitalWrite(LED_all[transmitted_data.sensorNum - 1], HIGH); // If moisture level is below the threshold, turn the light on
       }
       else{
-        digitalWrite(LED_all[transmitted_data.sensorNum], LOW); // If the moisture level is above the threshold, turn off the light
+        digitalWrite(LED_all[transmitted_data.sensorNum - 1], LOW); // If the moisture level is above the threshold, turn off the light
       }
 
       if(button_num == i) { 
