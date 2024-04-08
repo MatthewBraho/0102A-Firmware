@@ -162,7 +162,15 @@ void loop() {
         lcd.setCursor(0, 0);
         lcd.print(String("Sensor ") + String(button_num+1) + String(":"));
         lcd.setCursor(0, 1);
-        lcd.print(transmitted_data.moistureValue);
+        lcd.print(String(((transmitted_data.moistureValue)/1023.0)*100.0) + String("%"));
+        if(511.5 > transmitted_date.moistureValue) {
+          lcd.setCursor(8, 0);
+          lcd.print(String(((511.5 - transmitted_data.moistureValue)/0.179)*100.0) + String("%"));
+          lcd.setCursor(8, 1);
+          lcd.print("DRY");
+        } else {
+          lcd.print("DAMP");
+        }
       } 
       
       delay(1000);
