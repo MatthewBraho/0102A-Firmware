@@ -58,7 +58,6 @@ void loop() {
     }
     else{
       Serial.println("Not talking to me!");
-      delay(1000);
     }
 
   }

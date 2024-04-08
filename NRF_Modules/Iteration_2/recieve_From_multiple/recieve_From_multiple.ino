@@ -36,13 +36,9 @@ void loop() {
   if (radio.available()) {
     radio.read(&transmitted_data, sizeof(transmitted_data));
     //Serial.println(transmitted_data.sensorNum);
-    Serial.print("Sensor: "); 
-    Serial.print(transmitted_data.sensorNum); Serial.print(" | Moisture Value: "); 
-    Serial.println(transmitted_data.moistureValue);
+    Serial.print("Sensor: "); Serial.print(transmitted_data.sensorNum); Serial.print(" | Moisture Value: "); Serial.println(transmitted_data.moistureValue);
 
     //radio.read(&transmitted_data, sizeof(transmitted_data));
-    //Serial.print("Sensor: "); 
-    //Serial.print(transmitted_data.sensorNum); Serial.print(" | Moisture Value: "); 
-    //Serial.println(transmitted_data.moistureValue);
+    //Serial.print("Sensor: "); Serial.print(transmitted_data.sensorNum); Serial.print(" | Moisture Value: "); Serial.println(transmitted_data.moistureValue);
   }
 }
