@@ -17,6 +17,7 @@ RF24 radio(7, 8); // CE, CSN
 const uint64_t sensor_receieve_1 = 0xF0F0F0F0AA;
 const uint64_t sensor_receieve_2 = 0xF0F0F0F066;
 const uint64_t sensor_request = 0xF0F0F0F0F0;
+int water_amount = 0;
 
 //Array of pipe/sensor labels that receiever will call for
 uint16_t request[] = {1,2};
@@ -123,7 +124,16 @@ void loop() {
         lcd.setCursor(0, 0);
         lcd.print(String("Sensor ") + String(button_num+1) + String(":"));
         lcd.setCursor(0, 1);
-        lcd.print(transmitted_data.moistureValue);
+        lcd.print(String((transmitted_data.moistureValue)/1023.0) + String("%");
+        if(511.5 > transmitted_date.moistureValue) {
+          lcd.setCursor(8, 0);
+          lcd.print(String((511.5 - transmitted_data.moistureValue)/0.179));
+          lcd.setCursor(8, 1);
+          lcd.print("DRY");
+        } else {
+          lcd.print("DAMP");
+        }
+        
       } 
       
       delay(1000);
