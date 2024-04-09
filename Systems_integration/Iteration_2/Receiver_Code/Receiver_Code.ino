@@ -135,7 +135,7 @@ void loop() {
         lcd.print(String(((transmitted_data.moistureValue)/1023.0)*100.0) + String("%"));
         if(511.5 > transmitted_date.moistureValue) {
           lcd.setCursor(8, 0);
-          lcd.print(String(((511.5 - transmitted_data.moistureValue)/0.179)*100.0) + String("%"));
+          lcd.print(String(((511.5 - transmitted_data.moistureValue)/0.179)) + String("mL"));
           lcd.setCursor(8, 1);
           lcd.print("DRY");
         } else {

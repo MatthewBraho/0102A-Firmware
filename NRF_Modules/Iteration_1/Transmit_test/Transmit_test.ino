@@ -28,7 +28,7 @@ void setup() {
 void loop() {
   int moistureValue1 = analogRead(moistureSensorPin1); // Read the value from the first moisture sensor
 
-  if (moistureValue1 < 300) {
+  if (moistureValue1 < 511.5) {
     const char text[] = "DRY";
     //digitalWrite(ledPin1, HIGH); // Turn on the first LED if moisture value is below 300
     radio.write(&text, sizeof(text));

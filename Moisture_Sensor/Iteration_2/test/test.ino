@@ -24,7 +24,7 @@ void loop() {
   Serial.print("Moisture Sensor 1 Value: ");
   Serial.println(moistureValue1);
 
-  if (moistureValue1 < 300) {
+  if (moistureValue1 < 511.5) {
     digitalWrite(ledPin1, HIGH); // Turn on the first LED if moisture value is below 300
     Serial.print("DRY");
 
